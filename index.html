@@ -539,6 +539,38 @@
       gap: var(--space-md);
     }
 
+    .science__research-link {
+      margin-top: var(--space-lg);
+      text-align: center;
+    }
+
+    .science__research-link a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent-teal);
+      font-weight: 600;
+      font-size: var(--text-base);
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      border: 1px solid var(--accent-teal);
+      border-radius: var(--radius-md);
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .science__research-link a:hover {
+      background: var(--accent-teal);
+      color: var(--bg-primary);
+    }
+
+    .science__research-link a svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
     .finding {
       background: var(--bg-card);
       border: 1px solid var(--border-card);
@@ -839,6 +871,7 @@
         <li><a href="#privacy">Privacy</a></li>
         <li><a href="#profiles">Profiles</a></li>
         <li><a href="#science">Science</a></li>
+        <li><a href="/research">Research</a></li>
         <li><a href="#challenges">Challenges</a></li>
         <li><a href="#story">My Story</a></li>
       </ul>
@@ -1220,6 +1253,13 @@
           </article>
 
         </div>
+
+        <div class="science__research-link">
+          <a href="/research">
+            Read the full research foundations
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -1423,6 +1463,7 @@
           <div class="footer-links__group">
             <h4>Links</h4>
             <ul role="list">
+              <li><a href="/research">Research</a></li>
               <li><a href="#">Privacy Policy</a></li>
               <li><a href="https://github.com/vegaPDX" target="_blank" rel="noopener">vegaPDX on GitHub</a></li>
             </ul>
