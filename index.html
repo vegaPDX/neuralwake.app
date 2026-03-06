@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NeuralWake — a free, privacy-first Android alarm app guided by neuroscience research. Designed for neurodivergent brains — ADHD, autistic, and AuDHD. No ads, no data collection, no subscriptions.">
+  <meta name="theme-color" content="#0f1b2d">
+  <title>NeuralWake — Wake up with your brain, not against it.</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="NeuralWake — Wake up with your brain, not against it.">
+  <meta property="og:description" content="A free, privacy-first Android alarm app guided by neuroscience research. Designed for neurodivergent brains — ADHD, autistic, and AuDHD.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://neuralwake.app">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       CSS CUSTOM PROPERTIES
+       ============================================ */
+    :root {
+      /* Light mode palette */
+      --bg-primary: #f5f2ed;
+      --bg-secondary: #ece8e1;
+      --bg-card: #ffffff;
+      --bg-card-alt: #f9f7f4;
+      --text-primary: #1a1a2e;
+      --text-secondary: #4a4a5a;
+      --text-muted: #6b6b7b;
+      --accent-teal: #1a6b6a;
+      --accent-teal-light: #e8f4f3;
+      --accent-amber: #c4843e;
+      --accent-amber-light: #fdf3e7;
+      --border-light: #ddd8d0;
+      --border-card: #e8e4dc;
+
+      /* Spacing scale */
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2.5rem;
+      --space-xl: 4rem;
+      --space-2xl: 6rem;
+      --space-3xl: 8rem;
+
+      /* Type scale */
+      --text-sm: 0.875rem;
+      --text-base: 1.0625rem;
+      --text-lg: 1.25rem;
+      --text-xl: 1.5rem;
+      --text-2xl: 2rem;
+      --text-3xl: 2.75rem;
+      --text-4xl: 3.5rem;
+
+      /* Layout */
+      --max-width: 72rem;
+      --content-width: 48rem;
+      --radius: 12px;
+      --radius-lg: 20px;
+    }
+
+    /* Dark mode palette */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #0f1b2d;
+        --bg-secondary: #162236;
+        --bg-card: #1a2940;
+        --bg-card-alt: #17253a;
+        --text-primary: #e8e4dc;
+        --text-secondary: #b0adb8;
+        --text-muted: #8a8898;
+        --accent-teal: #4ecdc4;
+        --accent-teal-light: rgba(78, 205, 196, 0.1);
+        --accent-amber: #e8a955;
+        --accent-amber-light: rgba(232, 169, 85, 0.08);
+        --border-light: #2a3a52;
+        --border-card: #253448;
+      }
+    }
+
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      font-size: var(--text-base);
+      line-height: 1.7;
+      color: var(--text-primary);
+      background-color: var(--bg-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    h1, h2, h3, h4 {
+      font-family: 'Fraunces', 'Georgia', serif;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: var(--text-3xl);
+      margin-bottom: var(--space-md);
+    }
+
+    h3 {
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-sm);
+    }
+
+    p {
+      margin-bottom: var(--space-sm);
+      color: var(--text-secondary);
+    }
+
+    a {
+      color: var(--accent-teal);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+      transition: color 0.2s ease;
+    }
+    a:hover { color: var(--accent-amber); }
+    a:focus-visible {
+      outline: 2px solid var(--accent-teal);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+
+    strong { color: var(--text-primary); }
+
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    .container--narrow {
+      max-width: var(--content-width);
+    }
+
+    section {
+      padding: var(--space-2xl) 0;
+    }
+
+    /* ============================================
+       NAVIGATION
+       ============================================ */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-light);
+      padding: var(--space-sm) 0;
+    }
+
+    .site-nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .site-nav__logo {
+      font-family: 'Fraunces', serif;
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .site-nav__logo:hover { color: var(--accent-teal); }
+
+    .site-nav__links {
+      display: flex;
+      gap: var(--space-md);
+      list-style: none;
+    }
+
+    .site-nav__links a {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+    .site-nav__links a:hover { color: var(--accent-teal); }
+
+    @media (max-width: 640px) {
+      .site-nav__links { display: none; }
+    }
+
+    /* ============================================
+       HERO
+       ============================================ */
+    .hero {
+      padding: var(--space-3xl) 0 var(--space-2xl);
+      text-align: center;
+    }
+
+    .hero__badge {
+      display: inline-block;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--accent-teal);
+      background: var(--accent-teal-light);
+      padding: 0.35em 1em;
+      border-radius: 100px;
+      margin-bottom: var(--space-lg);
+      letter-spacing: 0.03em;
+    }
+
+    .hero__title {
+      font-size: var(--text-4xl);
+      font-weight: 700;
+      max-width: 14em;
+      margin: 0 auto var(--space-md);
+      line-height: 1.1;
+    }
+
+    .hero__subtitle {
+      font-size: var(--text-lg);
+      color: var(--text-secondary);
+      max-width: 34em;
+      margin: 0 auto var(--space-lg);
+      line-height: 1.6;
+    }
+
+    .hero__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6em;
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: #fff;
+      background: var(--accent-teal);
+      padding: 0.9em 2em;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+    .hero__cta:hover {
+      background: #15615f;
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero__cta:hover { transform: none; }
+    }
+
+    .hero__cta svg {
+      width: 1.2em;
+      height: 1.2em;
+      fill: currentColor;
+    }
+
+    .hero__subtext {
+      margin-top: var(--space-sm);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .hero__title { font-size: var(--text-2xl); }
+      .hero__subtitle { font-size: var(--text-base); }
+      .hero { padding: var(--space-2xl) 0 var(--space-xl); }
+    }
+
+    /* ============================================
+       SECTION HEADER COMPONENT
+       ============================================ */
+    .section-header {
+      margin-bottom: var(--space-xl);
+    }
+
+    .section-header__label {
+      display: inline-block;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--accent-amber);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-xs);
+    }
+
+    .section-header p {
+      font-size: var(--text-lg);
+      max-width: 38em;
+    }
+
+    /* ============================================
+       SENSORY PROMISE
+       ============================================ */
+    .sensory {
+      background: var(--bg-secondary);
+    }
+
+    .sensory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .sensory-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+    }
+
+    .sensory-card__icon {
+      font-size: 2rem;
+      margin-bottom: var(--space-sm);
+      display: block;
+    }
+
+    .sensory-card h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: var(--text-lg);
+    }
+
+    .sensory-card p {
+      font-size: var(--text-base);
+      color: var(--text-secondary);
+      margin-bottom: 0;
+    }
+
+    /* ============================================
+       PRIVACY SECTION
+       ============================================ */
+    .privacy__comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    @media (max-width: 640px) {
+      .privacy__comparison { grid-template-columns: 1fr; }
+    }
+
+    .privacy-col {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+    }
+
+    .privacy-col--them {
+      opacity: 0.75;
+    }
+
+    .privacy-col__heading {
+      font-family: 'DM Sans', sans-serif;
+      font-size: var(--text-base);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-xs);
+      border-bottom: 2px solid var(--border-light);
+    }
+
+    .privacy-col--us .privacy-col__heading {
+      color: var(--accent-teal);
+      border-color: var(--accent-teal);
+    }
+
+    .privacy-list {
+      list-style: none;
+    }
+
+    .privacy-list li {
+      padding: 0.5em 0;
+      font-size: var(--text-base);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6em;
+    }
+
+    .privacy-list li::before {
+      flex-shrink: 0;
+      font-size: 1.1em;
+      line-height: 1.5;
+    }
+
+    .privacy-col--them .privacy-list li::before {
+      content: "✕";
+      color: #c44;
+    }
+
+    .privacy-col--us .privacy-list li::before {
+      content: "✓";
+      color: var(--accent-teal);
+      font-weight: 700;
+    }
+
+    .privacy__note {
+      margin-top: var(--space-lg);
+      padding: var(--space-md);
+      background: var(--accent-teal-light);
+      border-radius: var(--radius);
+      border-left: 4px solid var(--accent-teal);
+    }
+
+    .privacy__note p {
+      margin-bottom: 0;
+      font-size: var(--text-base);
+    }
+
+    /* ============================================
+       PROFILES SECTION
+       ============================================ */
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      position: relative;
+    }
+
+    .profile-card__name {
+      font-family: 'Fraunces', serif;
+      font-size: var(--text-xl);
+      font-weight: 600;
+      margin-bottom: 0.2em;
+    }
+
+    .profile-card__tagline {
+      font-size: var(--text-sm);
+      color: var(--accent-teal);
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+
+    .profile-card__detail {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      padding: 0.3em 0;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .profile-card__detail:last-child {
+      border-bottom: none;
+    }
+
+    .profile-card__detail-label {
+      color: var(--text-muted);
+    }
+
+    .profile-card__detail-value {
+      font-weight: 500;
+      color: var(--text-primary);
+      text-align: right;
+    }
+
+    .accessibility-section {
+      margin-top: var(--space-xl);
+    }
+
+    .accessibility-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    .accessibility-item {
+      background: var(--accent-amber-light);
+      border-radius: var(--radius);
+      padding: var(--space-md);
+    }
+
+    .accessibility-item h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: var(--text-base);
+      font-weight: 600;
+      margin-bottom: 0.3em;
+    }
+
+    .accessibility-item p {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      margin-bottom: 0;
+    }
+
+    /* ============================================
+       SCIENCE SECTION
+       ============================================ */
+    .science {
+      background: var(--bg-secondary);
+    }
+
+    .science__findings {
+      margin-top: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .finding {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      display: grid;
+      grid-template-columns: 3.5rem 1fr;
+      gap: var(--space-md);
+      align-items: start;
+    }
+
+    @media (max-width: 640px) {
+      .finding {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .finding__icon {
+      font-size: 1.8rem;
+      text-align: center;
+      padding-top: 0.15em;
+    }
+
+    .finding h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+    }
+
+    .finding__citation {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 0.4em;
+      margin-bottom: 0;
+    }
+
+    /* ============================================
+       CHALLENGES SECTION
+       ============================================ */
+    .challenges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .challenge-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    .challenge-card__icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      padding-top: 0.15em;
+    }
+
+    .challenge-card__content h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: var(--text-base);
+      margin-bottom: 0.25em;
+    }
+
+    .challenge-card__content p {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      margin-bottom: 0;
+    }
+
+    .challenge-card__strength {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.15em 0.6em;
+      border-radius: 100px;
+      margin-top: 0.5em;
+      background: var(--accent-teal-light);
+      color: var(--accent-teal);
+    }
+
+    .challenges__adaptive {
+      margin-top: var(--space-lg);
+      padding: var(--space-lg);
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-card);
+    }
+
+    .challenges__adaptive h3 {
+      font-family: 'Fraunces', serif;
+      font-size: var(--text-xl);
+    }
+
+    /* ============================================
+       MY STORY SECTION
+       ============================================ */
+    .story {
+      background: var(--bg-secondary);
+    }
+
+    .story__content {
+      max-width: var(--content-width);
+    }
+
+    .story__content p {
+      font-size: var(--text-lg);
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .story__content p:first-of-type {
+      font-size: var(--text-xl);
+      color: var(--text-primary);
+    }
+
+    .story__signature {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border-light);
+    }
+
+    .story__signature p {
+      font-size: var(--text-base);
+      margin-bottom: 0.25em;
+    }
+
+    .story__signature strong {
+      font-size: var(--text-lg);
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .site-footer {
+      border-top: 1px solid var(--border-light);
+      padding: var(--space-xl) 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--space-lg);
+    }
+
+    .footer-brand {
+      max-width: 24em;
+    }
+
+    .footer-brand__name {
+      font-family: 'Fraunces', serif;
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.25em;
+    }
+
+    .footer-brand p {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: var(--space-xl);
+    }
+
+    .footer-links__group h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: var(--space-xs);
+    }
+
+    .footer-links__group ul {
+      list-style: none;
+    }
+
+    .footer-links__group li {
+      margin-bottom: 0.3em;
+    }
+
+    .footer-links__group a {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+    .footer-links__group a:hover {
+      color: var(--accent-teal);
+    }
+
+    .footer-bottom {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border-light);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .footer-inner { flex-direction: column; }
+      .footer-links { flex-direction: column; gap: var(--space-md); }
+    }
+
+    /* ============================================
+       UTILITY
+       ============================================ */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    .text-accent { color: var(--accent-teal); }
+
+    /* ============================================
+       FOOTNOTES
+       ============================================ */
+    .fn {
+      font-size: 0.7em;
+      vertical-align: super;
+      line-height: 0;
+      text-decoration: none;
+      color: var(--accent-teal);
+      font-weight: 600;
+      padding: 0 0.1em;
+    }
+    .fn:hover { color: var(--accent-amber); }
+
+    .references {
+      border-top: 1px solid var(--border-light);
+      padding: var(--space-xl) 0;
+    }
+
+    .references h2 {
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-md);
+    }
+
+    .references ol {
+      list-style: none;
+      counter-reset: ref;
+    }
+
+    .references li {
+      counter-increment: ref;
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      margin-bottom: 0.75em;
+      padding-left: 2em;
+      position: relative;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .references li::before {
+      content: counter(ref) ".";
+      position: absolute;
+      left: 0;
+      font-weight: 600;
+      color: var(--accent-teal);
+    }
+
+    .references a {
+      font-size: var(--text-sm);
+      word-break: break-all;
+    }
+
+    /* Sections are visible by default — no animation dependency */
+  </style>
+</head>
+<body>
+
+  <!-- ============================
+       NAVIGATION
+       ============================ -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="container">
+      <a href="#" class="site-nav__logo" aria-label="NeuralWake home">NeuralWake</a>
+      <ul class="site-nav__links" role="list">
+        <li><a href="#sensory">Sensory</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#profiles">Profiles</a></li>
+        <li><a href="#science">Science</a></li>
+        <li><a href="#challenges">Challenges</a></li>
+        <li><a href="#story">My Story</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ============================
+         HERO
+         ============================ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container container--narrow">
+        <span class="hero__badge">100% Free · No Ads · No Data Collection</span>
+        <h1 id="hero-title" class="hero__title">Wake up with your brain, not against it.</h1>
+        <p class="hero__subtitle">
+          NeuralWake is a free, privacy-first Android alarm app guided by neuroscience research.
+          Designed for neurodivergent brains — ADHD, autistic, and AuDHD — and excellent for everyone.
+        </p>
+        <a href="#" class="hero__cta" aria-label="Get NeuralWake on Google Play (coming soon)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.38 1.379a1 1 0 0 1 0 1.726l-2.38 1.38-2.533-2.533 2.533-2.533zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/></svg>
+          Get it on Google Play
+        </a>
+        <p class="hero__subtext">Coming soon to Android</p>
+      </div>
+    </section>
+
+    <!-- ============================
+         SENSORY PROMISE
+         ============================ -->
+    <section class="sensory" id="sensory" aria-labelledby="sensory-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-header__label">The Sensory Promise</span>
+          <h2 id="sensory-title">Never startled awake again.</h2>
+          <p>
+            Traditional alarms are designed to shock you conscious. For autistic and ADHD brains,
+            that shock can trigger fight-or-flight responses, sensory overload, and morning meltdowns
+            before the day even begins. NeuralWake takes a different approach.
+          </p>
+        </div>
+
+        <div class="sensory-grid">
+          <div class="sensory-card">
+            <span class="sensory-card__icon" aria-hidden="true">🛡️</span>
+            <h3>Sensory Guardian</h3>
+            <p>
+              Ultra-minimal stimulation. Starts at 30 dB, never exceeds 60 dB. Simple tones between
+              200–500 Hz. Warm amber light only. The "never startle" engineering guarantee.
+            </p>
+          </div>
+          <div class="sensory-card">
+            <span class="sensory-card__icon" aria-hidden="true">🌉</span>
+            <h3>Sensory Bridge</h3>
+            <p>
+              Multimodal but gentle. Layers light, vibration, and sound at low intensity — combined
+              for synergy without overwhelming any single sense.
+            </p>
+          </div>
+          <div class="sensory-card">
+            <span class="sensory-card__icon" aria-hidden="true">⚡</span>
+            <h3>Deep Activation</h3>
+            <p>
+              For deep sleepers who need stronger input. Higher volume, brighter visuals,
+              faster ramp — but still capped at 80 dB. Melodic sounds only, never flat beeps.
+            </p>
+          </div>
+        </div>
+
+        <div class="sensory-grid" style="margin-top: var(--space-md);">
+          <div class="sensory-card">
+            <span class="sensory-card__icon" aria-hidden="true">📳</span>
+            <h3>Haptic-Only Mode</h3>
+            <p>
+              Skip audio entirely, wake by vibration alone. For the 50–70% of autistic individuals
+              who experience decreased sound tolerance (hyperacusis).<a href="#ref-1" class="fn" aria-label="Reference 1">1</a>
+            </p>
+          </div>
+          <div class="sensory-card">
+            <span class="sensory-card__icon" aria-hidden="true">🌅</span>
+            <h3>Dawn Simulation</h3>
+            <p>
+              Screen-based pre-alarm light ramp starting 15–60 minutes before your alarm.
+              OLED-optimized warm amber progression — because your brain needs a sunrise, not a siren.
+            </p>
+          </div>
+          <div class="sensory-card">
+            <span class="sensory-card__icon" aria-hidden="true">🔇</span>
+            <h3>80 dB Hardware Cap</h3>
+            <p>
+              63% of autistic individuals cannot tolerate stimulation above 80 dB.<a href="#ref-3" class="fn" aria-label="Reference 3">3</a> NeuralWake enforces
+              this as an absolute ceiling across all profiles. No exceptions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================
+         RADICAL PRIVACY
+         ============================ -->
+    <section class="privacy" id="privacy" aria-labelledby="privacy-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-header__label">Privacy</span>
+          <h2 id="privacy-title">Radical Privacy in an Era of Surveillance Capitalism</h2>
+          <p>
+            92% of mental health apps share your data with third parties.<a href="#ref-2" class="fn" aria-label="Reference 2">2</a> The alarm app you use
+            during your most vulnerable moment of the day — groggy, half-conscious, barely awake —
+            shouldn't be harvesting your data. NeuralWake makes <strong>zero network calls</strong>. Not fewer. Zero.
+          </p>
+        </div>
+
+        <div class="privacy__comparison">
+          <div class="privacy-col privacy-col--them">
+            <div class="privacy-col__heading">The Industry</div>
+            <ul class="privacy-list" role="list">
+              <li>Popular alarm apps share data with ad networks and third-party advertisers</li>
+              <li>Some apps show ads when you hit snooze — at your groggiest, most vulnerable moment</li>
+              <li>One major alarm app built an entire adtech platform on its user data</li>
+              <li>Leading sleep apps send health data to third-party analytics services</li>
+              <li>Some apps have forced lifetime purchasers onto recurring subscriptions</li>
+              <li>Most "ADHD apps" cost $30–60/year in subscriptions</li>
+            </ul>
+          </div>
+          <div class="privacy-col privacy-col--us">
+            <div class="privacy-col__heading">NeuralWake</div>
+            <ul class="privacy-list" role="list">
+              <li>Zero network calls — not just "no tracking," literally no internet connection</li>
+              <li>No ads. Not ever. Not even "non-intrusive" ones</li>
+              <li>No analytics, no telemetry, no behavioral data</li>
+              <li>All data stored locally on your device in an encrypted database</li>
+              <li>100% free forever — no subscriptions, no paywalls, no "premium" tiers</li>
+              <li>No camera, microphone, location, or contacts permissions</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="privacy__note">
+          <p>
+            <strong>This is not a privacy policy — it is an architectural guarantee.</strong>
+            NeuralWake cannot collect your data because it has no mechanism to do so. There is no server.
+            There is no database in the cloud. Your brain, your data, your device. Nothing leaves.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================
+         NEURODIVERGENT PROFILES
+         ============================ -->
+    <section class="profiles" id="profiles" aria-labelledby="profiles-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-header__label">Neurodivergent Profiles</span>
+          <h2 id="profiles-title">Choose your brain. We'll handle the rest.</h2>
+          <p>
+            ADHD and autism create qualitatively different morning experiences that often demand
+            opposite design approaches. NeuralWake doesn't treat them as the same.
+            Each profile auto-configures challenges, sensory settings, difficulty caps, and reward feedback.
+          </p>
+        </div>
+
+        <div class="profiles-grid">
+
+          <!-- ADHD -->
+          <div class="profile-card">
+            <div class="profile-card__name">ADHD</div>
+            <div class="profile-card__tagline">Dopamine delivery, not discipline demands</div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Challenge Mode</span>
+              <span class="profile-card__detail-value">Discovery (rotating daily)</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Sensory</span>
+              <span class="profile-card__detail-value">Deep Activation</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Reward</span>
+              <span class="profile-card__detail-value">Full celebration</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Snooze Style</span>
+              <span class="profile-card__detail-value">"Bonus Round!"</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Streak Shields</span>
+              <span class="profile-card__detail-value">2 per week</span>
+            </div>
+          </div>
+
+          <!-- ASD -->
+          <div class="profile-card">
+            <div class="profile-card__name">ASD</div>
+            <div class="profile-card__tagline">Predictability and sensory respect</div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Challenge Mode</span>
+              <span class="profile-card__detail-value">Routine (same daily)</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Sensory</span>
+              <span class="profile-card__detail-value">Sensory Guardian</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Reward</span>
+              <span class="profile-card__detail-value">Data-based feedback</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Snooze Style</span>
+              <span class="profile-card__detail-value">"Take your time"</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Streak Shields</span>
+              <span class="profile-card__detail-value">2 per week</span>
+            </div>
+          </div>
+
+          <!-- AuDHD -->
+          <div class="profile-card">
+            <div class="profile-card__name">AuDHD</div>
+            <div class="profile-card__tagline">Structured novelty — predictable container, variable contents</div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Challenge Mode</span>
+              <span class="profile-card__detail-value">Structured Novelty</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Sensory</span>
+              <span class="profile-card__detail-value">Sensory Bridge</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Reward</span>
+              <span class="profile-card__detail-value">Configurable</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Snooze Style</span>
+              <span class="profile-card__detail-value">"Bonus Round!" + preview</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Streak Shields</span>
+              <span class="profile-card__detail-value">2 per week</span>
+            </div>
+          </div>
+
+          <!-- Custom -->
+          <div class="profile-card">
+            <div class="profile-card__name">Custom</div>
+            <div class="profile-card__tagline">Full manual control over every setting</div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Challenge Mode</span>
+              <span class="profile-card__detail-value">Your choice</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Sensory</span>
+              <span class="profile-card__detail-value">Your choice</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Reward</span>
+              <span class="profile-card__detail-value">Your choice</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Snooze Style</span>
+              <span class="profile-card__detail-value">Your choice</span>
+            </div>
+            <div class="profile-card__detail">
+              <span class="profile-card__detail-label">Streak Shields</span>
+              <span class="profile-card__detail-value">1 per week</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Learning Differences -->
+        <div class="accessibility-section">
+          <h3>Learning Differences</h3>
+          <p>
+            NeuralWake automatically adapts when you indicate a learning difference —
+            no challenges that work against your cognitive profile.
+          </p>
+          <div class="accessibility-grid">
+            <div class="accessibility-item">
+              <h4>Dyscalculia</h4>
+              <p>Auto-excludes Math and Fix the Clock challenges. Digital-only clock variant available.</p>
+            </div>
+            <div class="accessibility-item">
+              <h4>Dyslexia</h4>
+              <p>Auto-excludes Word Scramble and Word Search challenges.</p>
+            </div>
+            <div class="accessibility-item">
+              <h4>Dyspraxia</h4>
+              <p>Auto-excludes fine-motor challenges like Memory Tiles and Target Emoji.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================
+         THE SCIENCE
+         ============================ -->
+    <section class="science" id="science" aria-labelledby="science-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-header__label">The Science</span>
+          <h2 id="science-title">Guided by neuroscience, not marketing buzzwords.</h2>
+          <p>
+            Other alarm apps say "science-backed" without citing a single study.
+            NeuralWake is grounded in two comprehensive research reports covering 16 research
+            questions with citations to published, peer-reviewed literature. Every design decision
+            traces to real research.
+          </p>
+        </div>
+
+        <div class="science__findings">
+
+          <article class="finding">
+            <div class="finding__icon" aria-hidden="true">🧠</div>
+            <div>
+              <h3>ADHD sleep inertia lasts 45–120+ minutes</h3>
+              <p>
+                Driven by delayed circadian phase (73–80% are evening chronotypes),<a href="#ref-4" class="fn" aria-label="Reference 4">4</a> low basal morning cortisol,
+                and prefrontal cortex hypoactivation that's 30–40% behind typical development.<a href="#ref-5" class="fn" aria-label="Reference 5">5</a>
+                NeuralWake's phased arousal system starts simple and escalates gradually — meeting the brain where it is.
+              </p>
+              <p class="finding__citation">Kooij &amp; Van Veen, 2010 · Barkley, 1997 · Li Fulun et al., 2025</p>
+            </div>
+          </article>
+
+          <article class="finding">
+            <div class="finding__icon" aria-hidden="true">🌙</div>
+            <div>
+              <h3>Autistic brains have no biological dawn signal</h3>
+              <p>
+                Increased slow-wave sleep (43.8% vs. 35.9% controls)<a href="#ref-6" class="fn" aria-label="Reference 6">6</a> creates deeper "sleep wells."
+                Flat melatonin curves mean no natural signal to transition from sleep to wakefulness.<a href="#ref-7" class="fn" aria-label="Reference 7">7</a>
+                NeuralWake's dawn simulation provides the missing sunrise.
+              </p>
+              <p class="finding__citation">Kawai et al., 2022 · Rossignol &amp; Frye, 2011</p>
+            </div>
+          </article>
+
+          <article class="finding">
+            <div class="finding__icon" aria-hidden="true">🔊</div>
+            <div>
+              <h3>Autistic brains do not habituate to aversive sound</h3>
+              <p>
+                Unlike ADHD brains, where alarm sounds fade into background noise over time,
+                autistic brains experience alarm sounds as <em>more</em> aversive with repetition — not less.
+                63% cannot tolerate stimulation above 80 dB.<a href="#ref-3" class="fn" aria-label="Reference 3">3</a> This is why the hardware cap and sensory profiles exist.
+              </p>
+              <p class="finding__citation">Khalfa et al., 2004 · Takahashi et al., 2014</p>
+            </div>
+          </article>
+
+          <article class="finding">
+            <div class="finding__icon" aria-hidden="true">⏰</div>
+            <div>
+              <h3>Clock tasks are an autistic cognitive strength</h3>
+              <p>
+                Three independent neuroscience frameworks — hyper-systemizing theory (Baron-Cohen),<a href="#ref-8" class="fn" aria-label="Reference 8">8</a>
+                Enhanced Perceptual Functioning (Mottron),<a href="#ref-9" class="fn" aria-label="Reference 9">9</a> and Weak Central Coherence (Happé &amp; Frith)<a href="#ref-10" class="fn" aria-label="Reference 10">10</a>
+                — converge to predict that rule-based, detail-oriented clock tasks are optimal for autistic cognition.
+                This is why Fix the Clock is the recommended default for ASD profiles.
+              </p>
+              <p class="finding__citation">Baron-Cohen, 2006 · Mottron, 2006 · Happé &amp; Frith, 2006</p>
+            </div>
+          </article>
+
+          <article class="finding">
+            <div class="finding__icon" aria-hidden="true">🎯</div>
+            <div>
+              <h3>Positive reinforcement approximates stimulant medication</h3>
+              <p>
+                For ADHD brains, positive reinforcement improves attention at rates comparable to
+                stimulant medication.<a href="#ref-11" class="fn" aria-label="Reference 11">11</a> Punishment is highly ineffective for ADHD habit formation.
+                This is why NeuralWake reframes snoozing as "Bonus Round!" and uses streak shields instead of streak-breaking.
+              </p>
+              <p class="finding__citation">Hawk et al., 2014 · Sundelin et al., 2024</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================
+         CHALLENGES
+         ============================ -->
+    <section class="challenges" id="challenges" aria-labelledby="challenges-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-header__label">Cognitive Challenges</span>
+          <h2 id="challenges-title">7 challenges calibrated to your cognitive profile.</h2>
+          <p>
+            Each challenge is designed around specific neuroscience research on how different
+            brains process information upon waking. Difficulty is capped per profile to respect
+            cognitive limits — never to frustrate.
+          </p>
+        </div>
+
+        <div class="challenges-grid">
+          <div class="challenge-card">
+            <div class="challenge-card__icon" aria-hidden="true">🔤</div>
+            <div class="challenge-card__content">
+              <h3>Word Scramble</h3>
+              <p>Unscramble a word (4–9+ letters). Verbal working memory is the least impaired domain in ADHD.</p>
+              <span class="challenge-card__strength">ADHD strength</span>
+            </div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-card__icon" aria-hidden="true">🎴</div>
+            <div class="challenge-card__content">
+              <h3>Memory Tiles</h3>
+              <p>Emoji pair matching on a grid. Leverages Enhanced Perceptual Functioning — a visual pattern strength in autistic cognition.</p>
+              <span class="challenge-card__strength">ASD strength</span>
+            </div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-card__icon" aria-hidden="true">⏰</div>
+            <div class="challenge-card__content">
+              <h3>Fix the Clock</h3>
+              <p>Set the correct time on a deliberately wrong clock. Three neuroscience frameworks converge: this is optimal for autistic brains.</p>
+              <span class="challenge-card__strength">ASD strength</span>
+            </div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-card__icon" aria-hidden="true">⏳</div>
+            <div class="challenge-card__content">
+              <h3>Time Shift</h3>
+              <p>"What time will it be in 25 minutes?" Mental time arithmetic that engages the systemizing drive.</p>
+              <span class="challenge-card__strength">ASD strength</span>
+            </div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-card__icon" aria-hidden="true">🔢</div>
+            <div class="challenge-card__content">
+              <h3>Math</h3>
+              <p>Arithmetic scaling from simple addition to multiplication. Autistic brains show superior numerical operations.</p>
+              <span class="challenge-card__strength">ASD strength</span>
+            </div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-card__icon" aria-hidden="true">🎯</div>
+            <div class="challenge-card__content">
+              <h3>Target Emoji</h3>
+              <p>Find the target emoji in a grid of distractors. Quick visual scan with a dopamine hit on discovery.</p>
+              <span class="challenge-card__strength">Both</span>
+            </div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-card__icon" aria-hidden="true">🔍</div>
+            <div class="challenge-card__content">
+              <h3>Word Search</h3>
+              <p>Find hidden words in a letter grid (6×6 to 10×10). Systematic search leverages autistic pattern detection.</p>
+              <span class="challenge-card__strength">ASD strength</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="challenges__adaptive">
+          <h3>Adaptive Difficulty Engine</h3>
+          <p>
+            NeuralWake automatically adjusts challenge difficulty based on your patterns.
+            Weekend grace for ADHD and AuDHD profiles. New user protection for your first few days.
+            Snooze struggle detection lowers difficulty when mornings are hard. Thriving streak recognition
+            when you're on a roll. The difficulty always respects your profile's caps — an ADHD profile will
+            never get a Math problem above single-digit addition upon waking.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================
+         MY STORY
+         ============================ -->
+    <section class="story" id="story" aria-labelledby="story-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-header__label">My Story</span>
+          <h2 id="story-title">Built by an autistic developer, for brains like ours.</h2>
+        </div>
+
+        <div class="story__content">
+          <p>
+            NeuralWake started from a simple question: "What annoys you lately?"
+          </p>
+          <p>
+            I was trying to brainstorm a coding project but didn't have any real ideas. So I asked
+            Claude to help me think of something. Instead of suggesting projects, it asked me about
+            my actual daily friction points — the small, personal, "weird" frustrations. My immediate
+            thought: <em>I hate my alarm in the morning.</em>
+          </p>
+          <p>
+            I thought back to the pre-smartphone era, when I used to purposely set my radio alarm clock
+            to the wrong time. Every morning, I'd have to calculate in my head what time it actually was.
+            I instinctively knew that mental calculation helped me feel awake faster. I had to keep changing
+            the clock display so it didn't become routine math.
+          </p>
+          <p>
+            Back then, I didn't know I'm autistic — I wasn't diagnosed until my early 30s. When I got
+            that diagnosis, my entire past finally made sense. I was always a little odd, didn't
+            understand social norms, and never understood why. Once I had my diagnosis, everything clicked.
+          </p>
+          <p>
+            I also didn't realize my little radio alarm clock trick was grounded in real neuroscience.
+            When I started reading the research for this project — over 40 papers on sleep inertia,
+            ADHD dopamine systems, autistic sensory processing, circadian rhythms — I discovered that
+            three independent neuroscience frameworks converge to predict that clock-reading tasks
+            are optimal for autistic cognition. My pre-diagnosis intuition was backed by science I
+            didn't know existed.
+          </p>
+          <p>
+            That same research revealed something else: traditional alarms actively work against
+            neurodivergent biology. They trigger fight-or-flight responses that can derail an entire
+            day before it starts. And the apps that claim to help? They show you ads when you're
+            half-conscious, harvest your health data, and charge you $60 a year for the privilege.
+          </p>
+          <p>
+            NeuralWake is what I built instead. An alarm that works with your brain, not against it.
+            Designed from peer-reviewed neuroscience research for the brains that need it most.
+            100% free forever — because the "ADHD tax" of expensive subscriptions targeting people who
+            struggle with cancellation is a real problem, and charging for something this essential
+            felt wrong.
+          </p>
+          <p>
+            NeuralWake is my first real app. I hope you enjoy using it. And if you like it enough
+            to tell a friend, a family member, or a co-worker about it — that would truly mean
+            everything to me.
+          </p>
+
+          <div class="story__signature">
+            <p><strong>Vega</strong></p>
+            <p>Solo developer, vegaPDX</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================
+       REFERENCES
+       ============================ -->
+  <section class="references" id="references" aria-labelledby="references-title">
+    <div class="container">
+      <h2 id="references-title">References</h2>
+      <ol>
+        <li id="ref-1">Williams, Z. J., Suzman, E., &amp; Woynaroski, T. G. (2021). Prevalence of Decreased Sound Tolerance (Hyperacusis) in Individuals With Autism Spectrum Disorder: A Meta-Analysis. <em>Ear and Hearing, 42</em>(5), 1137–1150. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8349927/" target="_blank" rel="noopener">PubMed Central</a></li>
+        <li id="ref-2">Huckvale, K., Torous, J., &amp; Larsen, M. E. (2019). Assessment of the Data Sharing and Privacy Practices of Smartphone Apps for Depression and Smoking Cessation. <em>JAMA Network Open, 2</em>(4), e192542. <a href="https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2730782" target="_blank" rel="noopener">jamanetwork.com</a></li>
+        <li id="ref-3">Khalfa, S., Bruneau, N., Rogé, B., et al. (2004). Increased perception of loudness in autism. <em>Hearing Research, 198</em>(1–2), 87–92. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0378595504002308" target="_blank" rel="noopener">ScienceDirect</a></li>
+        <li id="ref-4">Kooij, J. J. S., &amp; Bijlenga, D. (2013). The circadian rhythm in adult attention-deficit/hyperactivity disorder: Current state of affairs. <em>Expert Review of Neurotherapeutics, 13</em>(10), 1107–1116. See also: Van Veen, M. M., et al. (2010). Delayed circadian rhythm in adults with ADHD. <em>Biological Psychiatry, 67</em>(11), 1091–1096. <a href="https://pubmed.ncbi.nlm.nih.gov/20163790/" target="_blank" rel="noopener">PubMed</a></li>
+        <li id="ref-5">Barkley, R. A. (1997). Behavioral inhibition, sustained attention, and executive functions: Constructing a unifying theory of ADHD. <em>Psychological Bulletin, 121</em>(1), 65–94. <a href="https://pubmed.ncbi.nlm.nih.gov/9000892/" target="_blank" rel="noopener">PubMed</a></li>
+        <li id="ref-6">Kawai, M., Takahashi, A., &amp; Ota, T. (2022). Sleep architecture in autism spectrum disorder. <em>Frontiers in Neuroscience</em>. Reported 43.8% slow-wave sleep in autistic participants vs. 35.9% in controls.</li>
+        <li id="ref-7">Rossignol, D. A., &amp; Frye, R. E. (2011). Melatonin in autism spectrum disorders: A systematic review and meta-analysis. <em>Developmental Medicine &amp; Child Neurology, 53</em>(9), 783–792. <a href="https://pubmed.ncbi.nlm.nih.gov/21518346/" target="_blank" rel="noopener">PubMed</a></li>
+        <li id="ref-8">Baron-Cohen, S. (2006). The hyper-systemizing, assortative mating theory of autism. <em>Progress in Neuro-Psychopharmacology and Biological Psychiatry, 30</em>(5), 865–872. <a href="https://pubmed.ncbi.nlm.nih.gov/16519981/" target="_blank" rel="noopener">PubMed</a></li>
+        <li id="ref-9">Mottron, L., Dawson, M., Soulières, I., Hubert, B., &amp; Burack, J. (2006). Enhanced Perceptual Functioning in Autism: An Update, and Eight Principles of Autistic Perception. <em>Journal of Autism and Developmental Disorders, 36</em>(1), 27–43. <a href="https://pubmed.ncbi.nlm.nih.gov/16453071/" target="_blank" rel="noopener">PubMed</a></li>
+        <li id="ref-10">Happé, F., &amp; Frith, U. (2006). The Weak Coherence Account: Detail-focused Cognitive Style in Autism Spectrum Disorders. <em>Journal of Autism and Developmental Disorders, 36</em>(1), 5–25. <a href="https://pubmed.ncbi.nlm.nih.gov/16450045/" target="_blank" rel="noopener">PubMed</a></li>
+        <li id="ref-11">Bubnik, M. G., Hawk, L. W., Pelham, W. E., Waxmonsky, J. G., &amp; Rosch, K. S. (2015). Reinforcement enhances vigilance among children with ADHD: Comparisons to typically developing children and to the effects of methylphenidate. <em>Journal of Abnormal Child Psychology, 43</em>(1), 149–161. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4269577/" target="_blank" rel="noopener">PubMed Central</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================
+       FOOTER
+       ============================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-brand__name">NeuralWake</div>
+          <p>
+            A free, privacy-first Android alarm app guided by neuroscience research.
+            Built by vegaPDX in Portland, Oregon.
+          </p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-links__group">
+            <h4>Links</h4>
+            <ul role="list">
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="https://github.com/vegaPDX" target="_blank" rel="noopener">vegaPDX on GitHub</a></li>
+            </ul>
+          </div>
+          <div class="footer-links__group">
+            <h4>Contact</h4>
+            <ul role="list">
+              <li><a href="/cdn-cgi/l/email-protection#94e7e1e4e4fbe6e0d4faf1e1e6f5f8e3f5fff1baf5e4e4"><span class="__cf_email__" data-cfemail="65161015150a1711250b001017040912040e004b041515">[email&#160;protected]</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 vegaPDX. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
