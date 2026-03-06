@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Science Behind NeuralWake — Research Foundations</title>
+    <meta name="description" content="The neuroscience research behind NeuralWake's design. 16 research questions, 40+ peer-reviewed studies, and the evidence for why neurodivergent brains need a different kind of alarm.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           CSS CUSTOM PROPERTIES
+           ============================================ */
+        :root {
+            /* Dark mode (default) */
+            --bg-primary: #0f1729;
+            --bg-secondary: #162033;
+            --bg-card: #1a2744;
+            --bg-finding: #2a1f0a;
+            --bg-response: #0a2420;
+            --bg-details: #111d30;
+
+            --text-primary: #dfe6f0;
+            --text-secondary: #9badc4;
+            --text-muted: #6b7f99;
+
+            --accent-amber: #e8a838;
+            --accent-amber-soft: #c48a2a;
+            --accent-teal: #4fd1c5;
+            --accent-teal-soft: #2a9d93;
+            --accent-lavender: #b09cde;
+
+            --border-subtle: #243352;
+            --border-card: #2d4264;
+            --border-finding: #5c4a1a;
+            --border-response: #1a5c50;
+
+            --shadow-card: 0 2px 12px rgba(0,0,0,0.25);
+
+            --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+            --font-body: 'Atkinson Hyperlegible', system-ui, sans-serif;
+
+            --max-width: 780px;
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2.5rem;
+            --space-xl: 4rem;
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-primary: #f8f6f3;
+                --bg-secondary: #f0ede8;
+                --bg-card: #ffffff;
+                --bg-finding: #fef9ee;
+                --bg-response: #eef9f7;
+                --bg-details: #f5f3f0;
+
+                --text-primary: #1a202c;
+                --text-secondary: #4a5568;
+                --text-muted: #718096;
+
+                --accent-amber: #b87a15;
+                --accent-amber-soft: #c48a2a;
+                --accent-teal: #1a7a70;
+                --accent-teal-soft: #2a9d93;
+                --accent-lavender: #6b50a0;
+
+                --border-subtle: #e2ddd6;
+                --border-card: #d6d0c8;
+                --border-finding: #e8d9a8;
+                --border-response: #a8d8d0;
+
+                --shadow-card: 0 2px 8px rgba(0,0,0,0.06);
+            }
+        }
+
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 17px;
+            scroll-behavior: smooth;
+            scroll-padding-top: 5rem;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.72;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ============================================
+           TYPOGRAPHY
+           ============================================ */
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        h2 {
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: var(--space-xs);
+        }
+
+        p {
+            margin-bottom: var(--space-sm);
+            color: var(--text-secondary);
+        }
+
+        a {
+            color: var(--accent-teal);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+            transition: color 0.15s ease;
+        }
+        a:hover, a:focus { color: var(--accent-teal-soft); }
+        a:focus-visible {
+            outline: 2px solid var(--accent-teal);
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+
+        strong { color: var(--text-primary); }
+
+        .researcher {
+            color: var(--accent-lavender);
+            font-weight: 700;
+        }
+
+        .stat {
+            color: var(--accent-amber);
+            font-weight: 700;
+            font-family: var(--font-heading);
+        }
+
+        .ref-sup {
+            font-size: 0.7em;
+            vertical-align: super;
+            line-height: 0;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            color: var(--accent-teal);
+            text-decoration: none;
+            padding: 0 0.12em;
+            cursor: pointer;
+        }
+        .ref-sup:hover {
+            text-decoration: underline;
+            color: var(--accent-teal-soft);
+        }
+        .ref-sup:focus-visible {
+            outline: 2px solid var(--accent-teal);
+            outline-offset: 1px;
+            border-radius: 2px;
+        }
+
+        /* ============================================
+           LAYOUT
+           ============================================ */
+        .page-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-md);
+        }
+
+        @media (min-width: 640px) {
+            .page-container {
+                padding: var(--space-xl) var(--space-lg);
+            }
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .page-header {
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: var(--space-md);
+        }
+        .back-link:hover { color: var(--accent-teal); }
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 640px;
+        }
+
+        .research-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+
+        .research-stat {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 0.75rem 1.1rem;
+            min-width: 140px;
+        }
+
+        .research-stat-number {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--accent-amber);
+        }
+
+        .research-stat-label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           TABLE OF CONTENTS
+           ============================================ */
+        .toc {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+
+        .toc h3 {
+            margin-bottom: var(--space-sm);
+        }
+
+        .toc-list {
+            list-style: none;
+            display: grid;
+            gap: 0.35rem;
+        }
+
+        .toc-list a {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            text-decoration: none;
+            padding: 0.3rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .toc-list a:hover {
+            background: var(--bg-details);
+            color: var(--text-primary);
+        }
+
+        .toc-number {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--accent-teal);
+            min-width: 1.6rem;
+        }
+
+        /* ============================================
+           SECTIONS
+           ============================================ */
+        .research-section {
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-xl);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .research-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .section-number {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: var(--accent-teal);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ============================================
+           KEY FINDING BOX
+           ============================================ */
+        .key-finding {
+            background: var(--bg-finding);
+            border: 1px solid var(--border-finding);
+            border-left: 4px solid var(--accent-amber);
+            border-radius: 0 10px 10px 0;
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+
+        .key-finding-label {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-amber);
+            margin-bottom: 0.4rem;
+        }
+
+        .key-finding p {
+            color: var(--text-primary);
+            font-size: 1.02rem;
+            line-height: 1.65;
+            margin-bottom: 0;
+        }
+
+        /* ============================================
+           NEURALWAKE RESPONSE BOX
+           ============================================ */
+        .nw-response {
+            background: var(--bg-response);
+            border: 1px solid var(--border-response);
+            border-left: 4px solid var(--accent-teal);
+            border-radius: 0 10px 10px 0;
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+
+        .nw-response-label {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-teal);
+            margin-bottom: 0.4rem;
+        }
+
+        .nw-response p {
+            color: var(--text-primary);
+            margin-bottom: 0;
+        }
+
+        /* ============================================
+           DETAILS / EXPANDABLE
+           ============================================ */
+        details {
+            background: var(--bg-details);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            margin: var(--space-sm) 0;
+        }
+
+        summary {
+            padding: 0.85rem var(--space-md);
+            cursor: pointer;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            user-select: none;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::before {
+            content: '▸';
+            font-size: 0.85rem;
+            color: var(--accent-teal);
+            transition: transform 0.15s ease;
+            display: inline-block;
+        }
+        details[open] > summary::before {
+            transform: rotate(90deg);
+        }
+        summary:hover { color: var(--text-primary); }
+        summary:focus-visible {
+            outline: 2px solid var(--accent-teal);
+            outline-offset: -2px;
+            border-radius: 10px;
+        }
+
+        .details-content {
+            padding: 0 var(--space-md) var(--space-md) var(--space-md);
+        }
+
+        .details-content p {
+            font-size: 0.95rem;
+        }
+
+        /* ============================================
+           COMPARISON BOXES
+           ============================================ */
+        .comparison-grid {
+            display: grid;
+            gap: var(--space-sm);
+            margin: var(--space-md) 0;
+        }
+
+        @media (min-width: 540px) {
+            .comparison-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .comparison-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: var(--space-md);
+        }
+
+        .comparison-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-card p {
+            font-size: 0.92rem;
+            margin-bottom: 0;
+        }
+
+        .card-adhd { border-top: 3px solid #e87040; }
+        .card-adhd h4 { color: #e87040; }
+
+        .card-autism { border-top: 3px solid #6ba0e8; }
+        .card-autism h4 { color: #6ba0e8; }
+
+        .card-audhd { border-top: 3px solid #b06be8; }
+        .card-audhd h4 { color: #b06be8; }
+
+        /* ============================================
+           REFERENCES
+           ============================================ */
+        .ref-section {
+            margin-top: var(--space-xl);
+        }
+
+        .ref-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .ref-group h3 {
+            font-size: 1rem;
+            margin-bottom: var(--space-sm);
+            color: var(--accent-amber-soft);
+        }
+
+        .ref-list {
+            list-style: none;
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .ref-list li {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            padding-left: 1rem;
+            text-indent: -1rem;
+        }
+
+        .ref-list li strong {
+            color: var(--text-secondary);
+        }
+
+        /* Numbered references (from details sections) */
+        .ref-numbered {
+            list-style: none;
+            counter-reset: ref-counter;
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .ref-numbered li {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            padding-left: 2.4rem;
+            position: relative;
+            scroll-margin-top: 5rem;
+        }
+
+        .ref-numbered li::before {
+            counter-increment: ref-counter;
+            content: counter(ref-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: var(--accent-teal);
+            background: var(--bg-details);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            width: 1.8rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ref-numbered li strong {
+            color: var(--text-secondary);
+        }
+
+        .ref-numbered li a {
+            font-size: 0.82rem;
+        }
+
+        .ref-divider-label {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: var(--accent-amber-soft);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-xs);
+            padding-top: var(--space-sm);
+            border-top: 1px solid var(--border-subtle);
+        }
+        .ref-divider-label:first-child {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .page-footer {
+            margin-top: var(--space-xl);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+        }
+
+        .page-footer p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-top: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 480px) {
+            html { font-size: 16px; }
+            h1 { font-size: 1.9rem; }
+            h2 { font-size: 1.4rem; }
+            .research-stats { gap: 0.6rem; }
+            .research-stat { min-width: 120px; flex: 1; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page-container" role="main">
+
+        <!-- ============================================
+             HEADER
+             ============================================ -->
+        <header class="page-header">
+            <a href="/" class="back-link" aria-label="Back to NeuralWake home">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                neuralwake.app
+            </a>
+
+            <h1>The Science Behind NeuralWake</h1>
+            <p class="page-subtitle">
+                Every design decision in NeuralWake traces to published neuroscience research on how ADHD and autistic brains actually sleep and wake. This page explains the science — not as marketing, but as the foundation the app was built on.
+            </p>
+
+            <div class="research-stats" aria-label="Research statistics">
+                <div class="research-stat">
+                    <span class="research-stat-number">16</span>
+                    <span class="research-stat-label">Research questions explored</span>
+                </div>
+                <div class="research-stat">
+                    <span class="research-stat-number">40+</span>
+                    <span class="research-stat-label">Peer-reviewed studies cited</span>
+                </div>
+                <div class="research-stat">
+                    <span class="research-stat-number">2</span>
+                    <span class="research-stat-label">Independent literature audits</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ============================================
+             TABLE OF CONTENTS
+             ============================================ -->
+        <nav class="toc" aria-label="Page contents">
+            <h3>On This Page</h3>
+            <ol class="toc-list">
+                <li><a href="#sleep"><span class="toc-number">01</span> How Neurodivergent Brains Sleep Differently</a></li>
+                <li><a href="#inertia"><span class="toc-number">02</span> The Extended Boot-Up Period</a></li>
+                <li><a href="#sensory"><span class="toc-number">03</span> Why Traditional Alarms Cause Harm</a></li>
+                <li><a href="#strengths"><span class="toc-number">04</span> Cognitive Strengths, Not Just Deficits</a></li>
+                <li><a href="#motivation"><span class="toc-number">05</span> Motivation and Reward</a></li>
+                <li><a href="#time"><span class="toc-number">06</span> Time Blindness</a></li>
+                <li><a href="#habits"><span class="toc-number">07</span> Building Habits That Last</a></li>
+                <li><a href="#audhd"><span class="toc-number">08</span> The AuDHD Brain</a></li>
+                <li><a href="#accessibility"><span class="toc-number">09</span> Accessibility Beyond Neurodivergence</a></li>
+                <li><a href="#references"><span class="toc-number">10</span> Key References</a></li>
+            </ol>
+        </nav>
+
+
+        <!-- ============================================
+             SECTION 1: SLEEP ARCHITECTURE
+             ============================================ -->
+        <section class="research-section" id="sleep">
+            <div class="section-number">Section 01</div>
+            <h2>How Neurodivergent Brains Sleep Differently</h2>
+            <p>
+                Before we can understand why waking up is so hard, we need to understand what's happening during sleep. Neurodivergent brains don't just struggle with mornings — they have fundamentally different sleep architecture.
+            </p>
+
+            <div class="key-finding">
+                <div class="key-finding-label">Key Finding</div>
+                <p>
+                    ADHD and autistic brains sleep differently from each other and from neurotypical brains — and these differences require different design approaches for an alarm app.
+                </p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-card card-adhd">
+                    <h4>ADHD Sleep</h4>
+                    <p>
+                        <span class="stat">73–80%</span> of ADHDers are evening chronotypes with melatonin onset delayed by about <span class="stat">90 minutes</span> compared to the general population. The circadian clock itself is shifted — the brain thinks it's earlier than it actually is. Sleep disturbances affect up to <span class="stat">80%</span> of adults with ADHD.
+                    </p>
+                </div>
+                <div class="comparison-card card-autism">
+                    <h4>Autistic Sleep</h4>
+                    <p>
+                        Autistic brains spend more time in deep slow-wave sleep — <span class="stat">43.8%</span> versus 35.9% in controls — and less time in REM sleep. Melatonin production is fundamentally different: many autistic people have a "flat" melatonin curve with minimal day-night variation, meaning the brain receives <strong>no natural dawn signal</strong> to start waking up.
+                    </p>
+                </div>
+            </div>
+
+            <details>
+                <summary>The evidence in more detail</summary>
+                <div class="details-content">
+                    <p>
+                        For ADHD, <span class="researcher">Sandra Kooij</span> at Amsterdam UMC found that dim-light melatonin onset (DLMO) is delayed approximately 90 minutes in adults with ADHD (<span class="researcher">Van Veen et al., 2010</span>, <em>Biological Psychiatry</em>).<a href="#ref-1" class="ref-sup" aria-label="Reference 1">1</a> Delayed sleep-wake phase disorder affects 26% of ADHDers versus just 2% of controls.<a href="#ref-2" class="ref-sup" aria-label="Reference 2">2</a> <span class="researcher">Van der Ham et al. (2024)</span> analyzed 3,691 adults with ADHD and found delayed sleep phase prevalence at 36%.<a href="#ref-3" class="ref-sup" aria-label="Reference 3">3</a> Peripheral clock-gene rhythms (BMAL1, PER2) are dampened, and pineal gland volume is reduced.
+                    </p>
+                    <p>
+                        For autism, <span class="researcher">Kawai et al. (2022)</span> documented the increased slow-wave sleep through polysomnography.<a href="#ref-4" class="ref-sup" aria-label="Reference 4">4</a> <span class="researcher">Rossignol &amp; Frye's (2011)</span> meta-analysis showed that many autistic individuals have essentially no melatonin circadian variation at all.<a href="#ref-5" class="ref-sup" aria-label="Reference 5">5</a> <span class="researcher">Dai et al. (2025)</span> used Mendelian randomization to establish that circadian rhythm disruption is <strong>causally linked</strong> to autism, not merely co-occurring — a major advance from correlation to causation.<a href="#ref-6" class="ref-sup" aria-label="Reference 6">6</a>
+                    </p>
+                    <p>
+                        Unlike ADHD's consistently delayed sleep phase, autism presents diverse circadian profiles — some delayed, some irregular, some essentially absent. ADHD's circadian problem is primarily <em>timing</em>; autism's is <em>signaling</em>.
+                    </p>
+                </div>
+            </details>
+
+            <div class="nw-response">
+                <div class="nw-response-label">How NeuralWake Responds</div>
+                <p>
+                    Dawn Simulation begins a gradual, warm-amber light ramp up to 60 minutes before the alarm — compensating for the missing melatonin decline that should naturally lighten sleep. Pre-waking light exposure is supported by research showing it improves alertness, while light delivered after waking may not help at all.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ============================================
+             SECTION 2: SLEEP INERTIA
+             ============================================ -->
+        <section class="research-section" id="inertia">
+            <div class="section-number">Section 02</div>
+            <h2>The Extended Boot-Up Period</h2>
+            <p>
+                Sleep inertia is the period of grogginess, impaired thinking, and disorientation after waking. For most people it resolves in 15–30 minutes. For neurodivergent brains, it's a different story entirely.
+            </p>
+
+            <div class="key-finding">
+                <div class="key-finding-label">Key Finding</div>
+                <p>
+                    ADHD sleep inertia lasts an estimated <span class="stat">45–120+ minutes</span> — driven by low morning cortisol, suppressed prefrontal cortex function, and delayed circadian timing. Autistic sleep inertia may be equally long but is driven by different mechanisms: deeper sleep, no biological dawn signal, and a nervous system that struggles to transition between states.
+                </p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-card card-adhd">
+                    <h4>ADHD: "My body clock says it's night"</h4>
+                    <p>
+                        The prefrontal cortex — responsible for planning, decisions, and getting started — is the <strong>last</strong> brain region to reactivate after sleep. In ADHD, this region is already operating at reduced capacity when fully awake (<span class="researcher">Shaw et al., 2007</span>: delayed cortical maturation). Upon waking, dopamine and norepinephrine are at their lowest point. <span class="researcher">Li Fulun et al. (2025)</span> found basal morning cortisol is significantly lower in ADHD, compounding the problem.
+                    </p>
+                </div>
+                <div class="comparison-card card-autism">
+                    <h4>Autism: "I'm trapped in deep sleep"</h4>
+                    <p>
+                        Autism produces a <strong>"triple hit"</strong> on the transition to waking. First, more time in deep slow-wave sleep means a higher chance of being jolted from the deepest stage. Second, the flat melatonin curve provides no pre-dawn signal to gradually lighten sleep. Third, the autonomic nervous system shows reduced morning activity — the body cannot smoothly shift from sleep to wakefulness.
+                    </p>
+                </div>
+            </div>
+
+            <details>
+                <summary>The evidence in more detail</summary>
+                <div class="details-content">
+                    <p>
+                        <span class="researcher">Russell Barkley's (1997)</span> foundational model in <em>Psychological Bulletin</em> estimates that ADHDers are 30–40% behind peers in executive function development.<a href="#ref-7" class="ref-sup" aria-label="Reference 7">7</a> At wake time, this gap is maximally exposed. <span class="researcher">Arnsten (2009)</span> at Yale established that the prefrontal cortex requires optimal dopamine and norepinephrine levels to function — ADHD brains sit on the "too little" side of this curve even when fully awake.<a href="#ref-8" class="ref-sup" aria-label="Reference 8">8</a>
+                    </p>
+                    <p>
+                        For autism, "autistic inertia" is a distinct phenomenon. <span class="researcher">Buckle et al. (2021)</span> in <em>Frontiers in Psychology</em> documented autistic adults describing it using physics language: objects at rest stay at rest.<a href="#ref-9" class="ref-sup" aria-label="Reference 9">9</a> It's not a motivation problem — it's a <strong>state-maintenance phenomenon</strong> where the brain cannot shift between states regardless of intention. A 2025 large-scale study analyzing 15 years of community discourse confirmed autistic inertia as a physically disabling state requiring external intervention to break.<a href="#ref-10" class="ref-sup" aria-label="Reference 10">10</a>
+                    </p>
+                    <p>
+                        <span class="researcher">Zhang et al. (2025)</span> in <em>Ergonomics</em> provided hard numbers: sleep inertia causes a 72.1% drop in brain activity (measured by EEG). Active cognitive engagement — specifically visual working memory tasks — restored performance by up to 43.2%.<a href="#ref-11" class="ref-sup" aria-label="Reference 11">11</a> This is direct evidence that cognitive challenges during waking are physiologically helpful, not just annoying.
+                    </p>
+                </div>
+            </details>
+
+            <div class="nw-response">
+                <div class="nw-response-label">How NeuralWake Responds</div>
+                <p>
+                    NeuralWake's four-phase arousal sequence (Waiting → Warm-Up → Challenge → Complete) gives the brain time to transition gradually. The Grace Period lets you orient before any cognitive demand. The Wake Check re-verifies consciousness 5–30 minutes after dismissal — because research confirms that <em>feeling</em> awake doesn't mean you <em>are</em> cognitively awake.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ============================================
+             SECTION 3: SENSORY PROCESSING
+             ============================================ -->
+        <section class="research-section" id="sensory">
+            <div class="section-number">Section 03</div>
+            <h2>Why Traditional Alarms Cause Harm</h2>
+            <p>
+                This isn't about preference. The research shows that conventional alarm sounds can trigger measurable physiological stress responses in neurodivergent people — sometimes setting the tone for the entire day.
+            </p>
+
+            <div class="key-finding">
+                <div class="key-finding-label">Key Finding</div>
+                <p>
+                    An estimated <span class="stat">50–70%</span> of autistic people experience clinically significant decreased sound tolerance. <span class="stat">63%</span> cannot tolerate stimulation above 80 dB. Autistic brains do not habituate to aversive sounds — alarm sounds become <em>more</em> distressing over time, the opposite of what happens in ADHD.
+                </p>
+            </div>
+
+            <p>
+                <span class="researcher">Takahashi et al. (2014, 2016)</span> found that autistic children show exaggerated acoustic startle responses even to weak stimuli in the <span class="stat">65–85 dB</span> range — sounds at normal conversation volume can trigger a full physiological startle reflex upon waking. This isn't a filtering problem that can be overcome with willpower. <span class="researcher">Kohl et al. (2014)</span> confirmed this is a hardware-level sensitivity difference.
+            </p>
+            <p>
+                <span class="researcher">Poulsen et al. (2024)</span> in <em>Autism Research</em> reviewed auditory processing and found that 20% of autistic people have excellent frequency discrimination, which paradoxically relates to greater sound sensitivity and discomfort. The startle magnitude to weak stimuli was consistently larger in autistic participants.
+            </p>
+            <p>
+                ADHD sensory processing is different but also significant. <span class="researcher">Jurek et al. (2025)</span> meta-analyzed 30 studies and found sensory sensitivity scores significantly elevated across all modalities (effect size: <span class="stat">1.17</span>). The ADHD population splits between sensory over-responders and under-responders — one alarm profile cannot serve both.
+            </p>
+
+            <details>
+                <summary>What about alarm sound design?</summary>
+                <div class="details-content">
+                    <p>
+                        <span class="researcher">McFarlane et al. (2020)</span> in <em>PLOS ONE</em> demonstrated that <strong>melodic alarm sounds significantly reduce sleep inertia</strong>, while neutral or flat beep sounds can actually increase it.<a href="#ref-12" class="ref-sup" aria-label="Reference 12">12</a> The optimal frequency range is 500–2,000 Hz — detectable during sleep, yet gentle enough to avoid triggering a stress response. High-pitch tones around 4,000 Hz were less effective.
+                    </p>
+                    <p>
+                        Research also shows that multi-sensory alarms work best when layered gradually rather than delivered simultaneously. <span class="researcher">Deb et al. (2023)</span> in <em>BMC Medical Informatics</em> found that strategically pairing vibration with selective sound outperformed full multi-modal stimulation — too many simultaneous channels can overwhelm rather than help.<a href="#ref-13" class="ref-sup" aria-label="Reference 13">13</a>
+                    </p>
+                    <p>
+                        Light sensitivity affects up to 75% of autistic individuals. The solution is warm-spectrum light (amber/orange, 2700K or lower) rather than cool or blue-enriched light, delivered gradually over 20–30 minutes.
+                    </p>
+                </div>
+            </details>
+
+            <div class="nw-response">
+                <div class="nw-response-label">How NeuralWake Responds</div>
+                <p>
+                    NeuralWake enforces an <strong>80 dB hardware cap</strong> — no alarm can exceed this under any circumstance. Three sensory profiles (Sensory Guardian, Sensory Bridge, Deep Activation) serve the full range from ultra-minimal to aggressive multi-modal. All 20 bundled sounds are melodic — never flat beeps. A haptic-only mode skips audio entirely for people who need it. Sounds are organized by sensory profile so you only see options appropriate for your sensitivity level.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ============================================
+             SECTION 4: COGNITIVE STRENGTHS
+             ============================================ -->
+        <section class="research-section" id="strengths">
+            <div class="section-number">Section 04</div>
+            <h2>Cognitive Strengths, Not Just Deficits</h2>
+            <p>
+                Neuroscience research reveals specific cognitive strengths in both ADHD and autistic brains. NeuralWake's challenges are designed to engage these strengths rather than expose weaknesses — especially first thing in the morning when the brain is most vulnerable.
+            </p>
+
+            <div class="key-finding">
+                <div class="key-finding-label">Key Finding</div>
+                <p>
+                    Three independent theories of autistic cognition — hyper-systemizing, Enhanced Perceptual Functioning, and Weak Central Coherence — all predict that clock-correction and rule-based tasks directly engage autistic cognitive strengths. For ADHD, verbal working memory is the least impaired domain, making word-based challenges the most accessible upon waking.
+                </p>
+            </div>
+
+            <p>
+                <span class="researcher">Baron-Cohen's hyper-systemizing theory (2006, 2008)</span> proposes that autistic people have a strong drive to analyze rule-based systems. Clocks are rule-based systems: 12/24-hour cycles, 60-minute hours, predictable mathematical relationships. The Systemizing Quotient includes items like "I find it easy to work out what time it would be in other time zones" — time-system reasoning is literally measured as a systemizing trait. Autistic individuals consistently score higher on this measure.
+            </p>
+            <p>
+                <span class="researcher">Mottron's Enhanced Perceptual Functioning model (2006)</span> shows that autistic cognition features enhanced detail detection and local processing. Clock faces are essentially detail-detection tasks — finding the specific discrepancy embedded in visual complexity.
+            </p>
+            <p>
+                <span class="researcher">Happé and Frith's Weak Central Coherence account (2006)</span> reviewed 50+ studies showing a local processing advantage in autism. The most replicated finding is on the Embedded Figures Test, where autistic people locate hidden patterns with very large effect sizes (d = <span class="stat">2.8</span>).
+            </p>
+
+            <details>
+                <summary>ADHD working memory and challenge calibration</summary>
+                <div class="details-content">
+                    <p>
+                        <span class="researcher">Martinussen et al. (2005)</span> meta-analyzed 26 studies and found that visuospatial working memory shows the largest deficits in ADHD (effect size: 0.85–1.06), while verbal working memory shows the smallest deficits (0.43–0.47).<a href="#ref-14" class="ref-sup" aria-label="Reference 14">14</a> This means word-based challenges like Word Scramble are the most accessible for ADHD brains upon waking, while tile-matching games need to be limited to 3–4 pairs maximum.
+                    </p>
+                    <p>
+                        A surprising finding from <span class="researcher">Santhi et al. (2013)</span>: during sleep inertia, <strong>easier tasks were more affected than harder ones</strong>.<a href="#ref-15" class="ref-sup" aria-label="Reference 15">15</a> Moderately engaging challenges may actually help overcome sleep inertia by forcing active cognitive engagement that "boots up" the prefrontal cortex. The challenge isn't just an annoyance — it's a neurological intervention.
+                    </p>
+                    <p>
+                        For autism specifically, <span class="researcher">Iuculano et al. (2014)</span> in <em>Biological Psychiatry</em> found autistic children score significantly higher on numerical operations, using sophisticated strategies with distinct brain organization.<a href="#ref-16" class="ref-sup" aria-label="Reference 16">16</a> Math challenges can be genuine strengths for autistic users — the opposite of what you might expect.
+                    </p>
+                </div>
+            </details>
+
+            <div class="nw-response">
+                <div class="nw-response-label">How NeuralWake Responds</div>
+                <p>
+                    NeuralWake's 7 cognitive challenges are calibrated differently per profile. Fix the Clock and Math are recommended for autistic profiles (engaging strengths). Word Scramble is the default starting point for ADHD (least impaired domain). Memory Tiles are capped at easy difficulty for ADHD (most impaired domain) but uncapped for autistic profiles (pattern detection strength). Every challenge has profile-aware difficulty limits so you're never set up to fail.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ============================================
+             SECTION 5: MOTIVATION & REWARD
+             ============================================ -->
+        <section class="research-section" id="motivation">
+            <div class="section-number">Section 05</div>
+            <h2>Motivation and Reward</h2>
+            <p>
+                Why is it so hard to just "get up"? The answer is different depending on your brain — and understanding the difference changes everything about how an alarm should be designed.
+            </p>
+
+            <div class="key-finding">
+                <div class="key-finding-label">Key Finding</div>
+                <p>
+                    A landmark 2025 study in <em>Cell</em> analyzed ~12,000 brain scans and reframed ADHD as fundamentally a <strong>reward and motivation processing difference</strong>, not an attention deficit. Positive reinforcement in ADHD approximates the effect of stimulant medication for improving attention. Meanwhile, autistic reward processing is selectively different — not broadly reduced, but <strong>differently calibrated</strong>, with strong responses to specific interests and pattern-based feedback.
+                </p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-card card-adhd">
+                    <h4>ADHD: Interest-Based Motivation</h4>
+                    <p>
+                        ADHDers operate on what <span class="researcher">William Dodson</span> calls an interest-based nervous system, activated by Interest, Novelty, Challenge, Urgency, and Passion (the INCUP framework). <span class="researcher">Hawk et al. (2014)</span> found that positive reinforcement improved sustained attention to a degree <strong>comparable to stimulant medication</strong>. The reward must be <em>immediate</em> — the ADHD brain shows reduced response to reward anticipation but normal response to actually receiving it.
+                    </p>
+                </div>
+                <div class="comparison-card card-autism">
+                    <h4>Autism: Completion Satisfaction</h4>
+                    <p>
+                        <span class="researcher">Clements et al. (2018)</span> in <em>JAMA Psychiatry</em> found reduced responses to generic rewards but <strong>increased</strong> responses to interest-aligned stimuli. An estimated <span class="stat">50–65%</span> of autistic people experience alexithymia — difficulty identifying emotions — meaning generic celebration sounds and confetti can feel confusing or aversive. Finishing a defined task correctly is often a stronger motivator than any celebration.
+                    </p>
+                </div>
+            </div>
+
+            <details>
+                <summary>Why punishment doesn't work</summary>
+                <div class="details-content">
+                    <p>
+                        <span class="researcher">Seymour et al. (2019)</span> demonstrated lower frustration tolerance in ADHD, with participants more likely to quit frustrating tasks entirely.<a href="#ref-17" class="ref-sup" aria-label="Reference 17">17</a> <span class="researcher">CHADD guidelines</span> state that "positive behavior reinforcements work well if used quickly and often enough, whereas punishments are generally not effective." The ADHD brain shows heightened negative emotional arousal following punishment, triggering avoidance rather than engagement.
+                    </p>
+                    <p>
+                        For autistic people, punitive alarm escalation increases the risk of sensory-emotional overwhelm and meltdown. The start of the day <em>itself</em> can be distressing — adding punishment to that makes things worse, not better.
+                    </p>
+                    <p>
+                        <span class="researcher">Kay, Dosenbach, Fair et al. (2025)</span> in <em>Cell</em> showed that stimulant medications primarily affect arousal and reward processing networks rather than attention networks.<a href="#ref-18" class="ref-sup" aria-label="Reference 18">18</a> Stimulants essentially "pre-reward" the brain so tedious tasks feel more worthwhile. An alarm that works with reward systems instead of against them is doing something similar — without medication.
+                    </p>
+                </div>
+            </details>
+
+            <div class="nw-response">
+                <div class="nw-response-label">How NeuralWake Responds</div>
+                <p>
+                    Four reward levels let you choose what feedback feels right: Full Celebration (sound, visual, haptic), Simple Acknowledgment, Data-Based Feedback ("Day 5 · Best: 18s · 1 shield left"), or Silent Completion. Autistic profiles default to data-based feedback — engaging the systemizing drive while accommodating alexithymia. ADHD profiles get instant celebration. Snoozing is reframed as "Bonus Round!" — never punished. Streaks reset to 1, never zero.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ============================================
+             SECTION 6: TIME PERCEPTION
+             ============================================ -->
+        <section class="research-section" id="time">
+            <div class="section-number">Section 06</div>
+            <h2>Time Blindness</h2>
+            <p>
+                <span class="researcher">Russell Barkley</span> calls time blindness "the most devastating deficit in adult life that ADHD produces." People with ADHD collapse time into two categories: "now" and "not now."
+            </p>
+
+            <div class="key-finding">
+                <div class="key-finding-label">Key Finding</div>
+                <p>
+                    ADHD time perception deficits are robust across the largest-ever meta-analysis (<span class="stat">824 effect sizes</span>, medium-to-large overall effect), pervasive across all timescales, and <strong>independent</strong> of other executive function impairments. ADHDers have a faster internal clock, causing systematic overestimation of elapsed time. Meanwhile, autistic temporal processing is largely intact — and clock-based tasks are often a strength.
+                </p>
+            </div>
+
+            <p>
+                <span class="researcher">McFeaters et al. (2024)</span> in <em>Developmental Neuropsychology</em> analyzed 824 effect sizes and found a mean deficit of g = <span class="stat">0.688</span> — a medium-to-large effect. Crucially, this deficit survives when working memory, attention, and inhibition are controlled for, confirming it's an independent ADHD trait, not a side effect of other challenges.
+            </p>
+
+            <details>
+                <summary>The evidence in more detail</summary>
+                <div class="details-content">
+                    <p>
+                        <span class="researcher">Fuermaier et al. (2017)</span> found sustained attention deterioration in ADHD adults within 20-minute task blocks, with the greatest deficits in the final 5 minutes.<a href="#ref-19" class="ref-sup" aria-label="Reference 19">19</a> This points to a 30-second to 2-minute sweet spot for wake-up challenges — long enough for genuine engagement, short enough to prevent attention decay.
+                    </p>
+                    <p>
+                        For autistic time perception, three converging theories predict that clock and time tasks are actually a <strong>strength</strong>. <span class="researcher">Baron-Cohen's</span> Systemizing Quotient literally measures time-zone reasoning as a systemizing trait. <span class="researcher">Bierlich et al. (2025)</span> found basic timing perception in autistic adults is largely intact — difficulties arise from higher-level social timing, not fundamental temporal processing.<a href="#ref-20" class="ref-sup" aria-label="Reference 20">20</a>
+                    </p>
+                    <p>
+                        An exciting finding: <span class="researcher">Nejati et al. (2024)</span> showed that time perception training in ADHD transfers to emotional regulation and behavioral symptoms — meaning NeuralWake's time-based challenges might have benefits beyond just waking up.<a href="#ref-21" class="ref-sup" aria-label="Reference 21">21</a>
+                    </p>
+                </div>
+            </details>
+
+            <div class="nw-response">
+                <div class="nw-response-label">How NeuralWake Responds</div>
+                <p>
+                    Visual progress indicators are always visible during challenges — this directly compensates for time blindness by externalizing the abstract concept of time. Progress bars default to "how far you've come" (growth framing) rather than "time running out" (which can trigger anxiety). Fix the Clock and Time Shift challenges leverage autistic time-processing strengths. All challenges are capped at 2 minutes maximum.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ============================================
+             SECTION 7: HABIT FORMATION
+             ============================================ -->
+        <section class="research-section" id="habits">
+            <div class="section-number">Section 07</div>
+            <h2>Building Habits That Last</h2>
+            <p>
+                The popular claim that habits form in 21 days has been thoroughly debunked. For neurodivergent brains, the reality is both longer and more complex.
+            </p>
+
+            <div class="key-finding">
+                <div class="key-finding-label">Key Finding</div>
+                <p>
+                    General-population habit formation takes <span class="stat">106–154 days</span> on average — 3 to 5 months, not 3 weeks. ADHD habits may take even longer and <strong>may never fully automate</strong>, always requiring environmental support. Autistic habits form through a different mechanism (enlarged caudate nucleus) and tend to be more rigid once established. And snoozing? Research shows it's <strong>neutral-to-beneficial</strong> for morning cognition.
+                </p>
+            </div>
+
+            <p>
+                <span class="researcher">Singh et al. (2024)</span> in <em>Healthcare</em> meta-analyzed 20 studies and found the average habit formation timeline ranges from 106 to 154 days, with individual variation spanning 4 to 335 days. The previous 66-day estimate from <span class="researcher">Lally et al. (2010)</span> significantly underestimated the real timeline.
+            </p>
+
+            <div class="comparison-grid">
+                <div class="comparison-card card-adhd">
+                    <h4>ADHD: Permanent Scaffolding</h4>
+                    <p>
+                        ADHD habits remain fragile even once partially formed — competing stimuli can override them. The snooze decision is a textbook delayed-discounting scenario: 5 minutes of warmth now versus the abstract future benefit of being on time. ADHD delayed discounting (d = <span class="stat">0.43</span>) means immediate reward consistently wins.
+                    </p>
+                </div>
+                <div class="comparison-card card-autism">
+                    <h4>Autism: Robust but Rigid</h4>
+                    <p>
+                        <span class="researcher">Langen et al. (2014)</span> found the caudate nucleus grows at twice the rate in autistic children, mediating habitual behaviors. Once formed, autistic habits are maintained robustly — but changing them is costly. The alarm routine should become part of the daily structure, not something to graduate from.
+                    </p>
+                </div>
+            </div>
+
+            <details>
+                <summary>Why snoozing isn't the enemy</summary>
+                <div class="details-content">
+                    <p>
+                        <span class="researcher">Sundelin et al. (2024)</span> in the <em>Journal of Sleep Research</em> found that 30 minutes of snoozing actually <strong>improved or did not affect</strong> cognitive performance compared to abrupt awakening, and prevented arousal from deep slow-wave sleep.<a href="#ref-22" class="ref-sup" aria-label="Reference 22">22</a> Snoozers were 4× more likely to be evening chronotypes — the dominant ADHD chronotype. <span class="researcher">Robbins et al. (2025)</span> analyzed 3 million sleep sessions and found 56% ended with snooze use, averaging 2.5 presses.<a href="#ref-23" class="ref-sup" aria-label="Reference 23">23</a>
+                    </p>
+                    <p>
+                        Broken streaks are disproportionately demotivating for ADHD users due to loss aversion and rejection sensitivity. Clinical observations describe people deliberately breaking long streaks to relieve growing internal pressure, then abandoning the habit entirely.
+                    </p>
+                </div>
+            </details>
+
+            <div class="nw-response">
+                <div class="nw-response-label">How NeuralWake Responds</div>
+                <p>
+                    NeuralWake is designed as permanent environmental scaffolding, not a temporary training tool. The 150-day scaffolding period reflects the real science. Streak shields (2 per week for neurodivergent profiles) absorb missed days without breaking progress. Tracking is cumulative, not just consecutive. Snooze is limited and gently tapered over weeks, never removed entirely. "Today always counts" — streaks reset to 1, never zero.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ============================================
+             SECTION 8: AUDHD
+             ============================================ -->
+        <section class="research-section" id="audhd">
+            <div class="section-number">Section 08</div>
+            <h2>The AuDHD Brain</h2>
+            <p>
+                Approximately <span class="stat">40%</span> of autistic people also have ADHD. That's not a small subgroup — it's nearly half. And the combination creates unique challenges that neither condition alone fully explains.
+            </p>
+
+            <div class="key-finding">
+                <div class="key-finding-label">Key Finding</div>
+                <p>
+                    ADHD and autism often demand <strong>opposite</strong> design approaches: ADHD needs novelty while autism needs predictability. ADHD habituates to sounds too quickly while autistic brains develop increasing aversion. ADHD celebration boosts dopamine while autistic users may find it aversive. The resolution, consistently described in both clinical literature and lived experience, is <strong>"structured novelty"</strong> — a predictable container with variable contents.
+                </p>
+            </div>
+
+            <p>
+                <span class="researcher">Rong et al. (2021)</span> meta-analyzed 63 studies and found the 38–40% co-occurrence rate. <span class="researcher">Craig et al.'s (2016)</span> review of 26 studies found that the AuDHD group shares flexibility and planning deficits with autism <em>and</em> response inhibition deficits with ADHD. <span class="researcher">Huang et al. (2024)</span> confirmed the comorbid group scored highest across all executive function measures. AuDHD is the most severely affected group for both sensory processing and sleep.
+            </p>
+
+            <details>
+                <summary>How "structured novelty" resolves the tension</summary>
+                <div class="details-content">
+                    <p>
+                        <span class="researcher">Zaleski et al. (2025)</span> in <em>BMC Health Services Research</em> is the first large-scale study to formally operationalize AuDHD as a distinct cohort.<a href="#ref-24" class="ref-sup" aria-label="Reference 24">24</a> AuDHD individuals describe an "internal tug-of-war" — needing routine while craving novelty.
+                    </p>
+                    <p>
+                        Clinicians call the resolution "structured flexibility" (<span class="researcher">Attwood &amp; Garnett</span>). The structure stays the same; the content within it varies. Changes are announced in advance. The habit formation timeline also has two phases: the ADHD side needs novelty rewards to maintain engagement long enough for the autism side to lock in the routine. Once the habit is embedded (typically 30+ days), the autism side maintains it robustly.
+                    </p>
+                </div>
+            </details>
+
+            <div class="nw-response">
+                <div class="nw-response-label">How NeuralWake Responds</div>
+                <p>
+                    Three challenge modes serve different needs: <strong>Routine Mode</strong> (same challenge every day — autism-preferred), <strong>Discovery Mode</strong> (rotating daily challenges — ADHD-preferred), and <strong>Structured Novelty Mode</strong> (same challenge type with weekly themed content rotation — AuDHD-preferred). The alarm sequence structure stays identical; only the content varies. Tomorrow's challenge is shown the night before in the Morning Preview card, reducing uncertainty.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ============================================
+             SECTION 9: ACCESSIBILITY
+             ============================================ -->
+        <section class="research-section" id="accessibility">
+            <div class="section-number">Section 09</div>
+            <h2>Accessibility Beyond Neurodivergence</h2>
+            <p>
+                Neurodevelopmental conditions rarely exist in isolation. Specific learning differences — dyscalculia, dyslexia, and dyspraxia — co-occur at elevated rates with both ADHD and autism. An alarm app grounded in neuroscience must account for this.
+            </p>
+
+            <div class="key-finding">
+                <div class="key-finding-label">Key Finding</div>
+                <p>
+                    <span class="researcher">Van Bergen et al. (2025)</span> analyzed 19,125 twin children and found that having one neurodevelopmental condition makes you <span class="stat">2.1–3.1× more likely</span> to have a second, driven by shared genetic risks. Dyslexia co-occurs with ADHD in 25–40% of cases. Dyspraxia co-occurs with ADHD at approximately 50%. An alarm app that ignores this is failing a significant portion of its users.
+                </p>
+            </div>
+
+            <p>
+                <strong>Dyscalculia</strong> (3–7% of the population) directly impacts math and clock-reading challenges. Research found that people with dyscalculia answered only about 6 of 28 clock-reading items correctly, with 60% confusing hour and minute hands. Analog clocks are inherently confusing when roughly 80% of the needed information (minute markings) is implicit.
+            </p>
+            <p>
+                <strong>Dyslexia</strong> (10–20% of the population) impacts word-based challenges. Letter manipulation is a core dyslexia difficulty, and reading can take up to 3× longer.
+            </p>
+            <p>
+                <strong>Dyspraxia</strong> (1.8–6% of the population) impacts any fine-motor interaction — tapping tiles, dragging clock hands, precise gestures. Research shows users with motor control differences continue improving their accuracy with targets up to 30mm, versus a 20mm plateau for others.
+            </p>
+
+            <div class="nw-response">
+                <div class="nw-response-label">How NeuralWake Responds</div>
+                <p>
+                    NeuralWake's accessibility settings automatically adjust for learning differences. Flagging dyscalculia auto-excludes Math and Fix the Clock challenges (with a digital-only clock variant available). Flagging dyslexia auto-excludes Word Scramble and Word Search. Flagging dyspraxia auto-excludes fine-motor challenges like Memory Tiles and Target Emoji. Users can also manually opt out of any specific challenge category. Every challenge is designed with large touch targets (minimum 48dp, ideally 64dp+) and generous spacing.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ============================================
+             SECTION 10: REFERENCES
+             ============================================ -->
+        <section class="ref-section" id="references">
+            <div class="section-number">Section 10</div>
+            <h2>Key References</h2>
+            <p>
+                The full research base includes 40+ peer-reviewed studies. Numbered references below correspond to the superscript citations in the expandable detail sections above. Additional studies that shaped NeuralWake's design are listed at the end.
+            </p>
+
+            <h3>Cited in Detail Sections</h3>
+
+            <ol class="ref-numbered">
+                <!-- Sleep Architecture & Circadian Rhythms -->
+                <li id="ref-1"><strong>Van Veen MM, Kooij JJS, Boonstra AM, et al. (2010)</strong> — Delayed circadian rhythm in adults with ADHD and chronic sleep-onset insomnia. DLMO delayed ~90 min; 73–80% evening chronotypes. <em>Biological Psychiatry</em>, 67(11):1091–1096.</li>
+
+                <li id="ref-2"><strong>Bijlenga D, Van der Heijden KB, Breuk M, et al. (2013)</strong> — Delayed sleep phase disorder prevalence of 26% in ADHD vs. 2% in controls. <em>Journal of Sleep Research</em>, 22(4):466–477.</li>
+
+                <li id="ref-3"><strong>Van der Ham M, et al. (2024)</strong> — Sleep problems in 3,691 adults with ADHD: DSPS prevalence 36%, insomnia 30.6%, RLS/PLMD 29%. <em>Journal of Attention Disorders</em>, 28(13):1642–1652.</li>
+
+                <li id="ref-4"><strong>Kawai M, et al. (2022)</strong> — Autistic sleep architecture: increased slow-wave sleep (43.8% vs. 35.9% controls), reduced REM sleep. Polysomnography study.</li>
+
+                <li id="ref-5"><strong>Rossignol DA &amp; Frye RE (2011)</strong> — Melatonin abnormalities in autism: flat circadian curves, no day-night variation. Meta-analysis of 5 RCTs showing melatonin improves sleep onset latency (Hedge's g = −2.46).</li>
+
+                <li id="ref-6"><strong>Dai X, et al. (2025)</strong> — Bidirectional Mendelian randomization establishing causal link between circadian rhythm disruption and ASD. Higher sleep efficiency causally protects against ASD. <em>Autism</em>, 29(1):76–86.</li>
+
+                <!-- Sleep Inertia & Waking -->
+                <li id="ref-7"><strong>Barkley RA (1997)</strong> — Foundational ADHD model: behavioral inhibition as core deficit, cascading into EF impairments. Estimates ADHDers are 30–40% behind peers in EF development. <em>Psychological Bulletin</em>, 121(1):65–94.</li>
+
+                <li id="ref-8"><strong>Arnsten AFT (2009)</strong> — Prefrontal cortex dependence on optimal catecholamine levels. Inverted-U dose-response curve; ADHD brains on the "too little" side. <em>Annals of the New York Academy of Sciences</em>, 1129:236–245.</li>
+
+                <li id="ref-9"><strong>Buckle KL, et al. (2021)</strong> — Autistic inertia as state-maintenance phenomenon: "objects at rest stay at rest." 32 autistic adults. Bidirectional: rest-inertia and motion-inertia. <em>Frontiers in Psychology</em>. <a href="https://doi.org/10.3389/fpsyg.2021.631596" rel="noopener" target="_blank">doi:10.3389/fpsyg.2021.631596</a></li>
+
+                <li id="ref-10"><strong>2025 discourse analysis (Communications Psychology)</strong> — Large-scale Reddit data mining study (501 posts, 15 years of naturalistic discourse). Characterized autistic inertia as physically disabling state requiring external intervention. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12873400/" rel="noopener" target="_blank">PMC12873400</a></li>
+
+                <li id="ref-11"><strong>Zhang Y, et al. (2025)</strong> — Quantified sleep inertia via EEG: 72.1% drop in relative power. Verbal engagement restored working memory by 24.32%; visual engagement by 43.24%. <em>Ergonomics</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/41249068/" rel="noopener" target="_blank">PubMed:41249068</a></li>
+
+                <!-- Sensory Processing & Alarm Design -->
+                <li id="ref-12"><strong>McFarlane SJ, et al. (2020)</strong> — Melodic alarm sounds significantly reduce perceived sleep inertia; neutral/beep sounds increase it. Optimal range: 500–2,000 Hz. <em>PLOS ONE</em>, 14(1):e0215788. <a href="https://doi.org/10.1371/journal.pone.0215788" rel="noopener" target="_blank">doi:10.1371/journal.pone.0215788</a></li>
+
+                <li id="ref-13"><strong>Deb S, et al. (2023)</strong> — Strategically pairing vibrotactile + selective auditory cues outperformed full multi-modal stimulation. Inverse effectiveness principle supports graduated sensory profiles. <em>BMC Medical Informatics and Decision Making</em>. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10154742/" rel="noopener" target="_blank">PMC10154742</a></li>
+
+                <!-- Cognitive Architecture & Challenge Design -->
+                <li id="ref-14"><strong>Martinussen R, et al. (2005)</strong> — ADHD working memory meta-analysis (26 studies): visuospatial most impaired (d = 0.85–1.06), verbal least impaired (d = 0.43–0.47). <em>JAACAP</em>, 44(4):377–384.</li>
+
+                <li id="ref-15"><strong>Santhi N, et al. (2013)</strong> — Paradoxical sleep inertia finding: easier tasks more affected than harder ones. Effects lasted over 2 hours on some domains. <em>PLOS ONE</em>, 8(11):e79688. <a href="https://doi.org/10.1371/journal.pone.0079688" rel="noopener" target="_blank">doi:10.1371/journal.pone.0079688</a></li>
+
+                <li id="ref-16"><strong>Iuculano T, et al. (2014)</strong> — Autistic children score significantly higher on numerical operations, using sophisticated decomposition strategies with distinct brain organization in ventral temporal-occipital cortex. <em>Biological Psychiatry</em>, 75(3):223–230.</li>
+
+                <!-- Motivation & Reward -->
+                <li id="ref-17"><strong>Seymour KE, et al. (2019)</strong> — Lower frustration tolerance in ADHD; participants more likely to quit frustrating tasks entirely. <em>Journal of Attention Disorders</em>, 23(9):1008–1016.</li>
+
+                <li id="ref-18"><strong>Kay BP, Dosenbach NUF, Fair DA, et al. (2025)</strong> — ADHD reframed as reward/motivation disorder. Analysis of ~12,000 brain scans from the ABCD Study. Stimulants primarily affect arousal and reward processing networks, not attention networks. <em>Cell</em>.</li>
+
+                <!-- Time Perception -->
+                <li id="ref-19"><strong>Fuermaier ABM, et al. (2017)</strong> — Sustained attention deterioration in ADHD adults within 20-minute task blocks; greatest deficits in the final 5 minutes.</li>
+
+                <li id="ref-20"><strong>Bierlich AM, et al. (2025)</strong> — Basic timing perception in autistic adults is largely intact; social timing difficulties arise from higher-level processing. <em>Scientific Reports</em>, 15(1):20157.</li>
+
+                <li id="ref-21"><strong>Nejati V, Derakhshan Z, et al. (2024)</strong> — RCT: time perception training (10–12 sessions) in ADHD transfers to "hot" executive functions (emotional decision-making, risk-taking) and behavioral symptoms. <em>Child Neuropsychology</em>, 30(4):636–651.</li>
+
+                <!-- Habit Formation & Snoozing -->
+                <li id="ref-22"><strong>Sundelin T, et al. (2024)</strong> — 30 minutes of snoozing improved or did not affect cognitive performance vs. abrupt awakening. Snoozers 4× more likely to be evening chronotypes. <em>Journal of Sleep Research</em>.</li>
+
+                <li id="ref-23"><strong>Robbins R, et al. (2025)</strong> — Analysis of 3 million sleep sessions: 56% ended with snooze use, averaging 2.5 presses and 11 minutes. <em>Scientific Reports</em>.</li>
+
+                <!-- AuDHD -->
+                <li id="ref-24"><strong>Zaleski AL, et al. (2025)</strong> — First large-scale claims-based study to formally operationalize AuDHD as a distinct cohort (N = 2,392,855). Higher healthcare utilization and comorbidity burden than ADHD-only or ASD-only groups. <em>BMC Health Services Research</em>, 25:1048.</li>
+            </ol>
+
+            <h3 style="margin-top: var(--space-lg);">Additional Studies That Shaped NeuralWake</h3>
+
+            <div class="ref-group">
+                <h3>Sleep Architecture &amp; Circadian Rhythms</h3>
+                <ul class="ref-list">
+                    <li><strong>Luu &amp; Fabiano (2025)</strong> — ADHD as circadian disorder: chronotherapy protocol synthesis. <em>Frontiers in Psychiatry</em>, 16:1697900. <a href="https://www.frontiersin.org/journals/psychiatry/articles/10.3389/fpsyt.2025.1697900/full" rel="noopener" target="_blank">Frontiers</a></li>
+                    <li><strong>Li Fulun et al. (2025)</strong> — Cortisol in ADHD: low basal morning cortisol (SMD = −0.63) with preserved CAR dynamics. Meta-analysis. <em>Psychoneuroendocrinology</em>, 181:107605.</li>
+                    <li><strong>Lunsford-Avery et al. (2025)</strong> — Ambulatory PSG in medication-free adolescents: reduced SWS (β = −0.40), lower delta power. <em>JAACAP</em>, 64(2):276–289.</li>
+                </ul>
+            </div>
+
+            <div class="ref-group">
+                <h3>Sleep Inertia &amp; Waking</h3>
+                <ul class="ref-list">
+                    <li><strong>Rapaport et al. (2024)</strong> — Bidirectional autistic inertia: both rest-inertia and motion-inertia (flow states). <em>Autism</em>, 28(5):1305–1315.</li>
+                    <li><strong>Shaw et al. (2007)</strong> — Delayed cortical maturation in ADHD: PFC hypoactivation baseline.</li>
+                </ul>
+            </div>
+
+            <div class="ref-group">
+                <h3>Sensory Processing &amp; Alarm Design</h3>
+                <ul class="ref-list">
+                    <li><strong>Khalfa et al. (2004)</strong> — 63% of autistic participants intolerant above 80 dB. Auditory sensitivity study.</li>
+                    <li><strong>Takahashi et al. (2014, 2016)</strong> — Exaggerated acoustic startle at 65–85 dB in autism.</li>
+                    <li><strong>Poulsen et al. (2024)</strong> — Auditory processing in autism: enhanced pitch discrimination, larger startle magnitude. <em>Autism Research</em>, 17(12):2452–2470.</li>
+                    <li><strong>Jurek et al. (2025)</strong> — ADHD sensory sensitivity meta-analysis: SMD = 1.17 across all modalities. <em>JAACAP</em></li>
+                </ul>
+            </div>
+
+            <div class="ref-group">
+                <h3>Cognitive Architecture</h3>
+                <ul class="ref-list">
+                    <li><strong>Baron-Cohen (2006, 2008)</strong> — Hyper-systemizing theory: autistic drive to analyze rule-based systems.</li>
+                    <li><strong>Mottron (2006)</strong> — Enhanced Perceptual Functioning: locally oriented perception, enhanced discrimination.</li>
+                    <li><strong>Happé &amp; Frith (2006)</strong> — Weak Central Coherence review: local processing advantage, Embedded Figures d = 2.8.</li>
+                    <li><strong>Bryant et al. (2024)</strong> — Gamified digital interventions meta-analysis: g = 0.28 for ADHD; preset time limits help. <em>JAMA Pediatrics</em>, 178(11):1136–1146.</li>
+                </ul>
+            </div>
+
+            <div class="ref-group">
+                <h3>Motivation &amp; Reward</h3>
+                <ul class="ref-list">
+                    <li><strong>Volkow et al. (2009)</strong> — Lower D2/D3 receptors in ADHD nucleus accumbens. PET imaging (n=53). <em>JAMA</em></li>
+                    <li><strong>Hawk et al. (2014)</strong> — Positive reinforcement approximates stimulant medication for ADHD attention improvement.</li>
+                    <li><strong>Clements et al. (2018)</strong> — Autistic reward processing: hypo for generic, hyper for interest-aligned stimuli. <em>JAMA Psychiatry</em></li>
+                    <li><strong>Bird &amp; Cook (2013)</strong> — Alexithymia in 50–65% of autistic people; modulates emotional processing. <em>Translational Psychiatry</em></li>
+                    <li><strong>Kirsch et al. (2025)</strong> — Alexithymia modulates social brain activity in autistic adults. <em>Biological Psychiatry: CNNI</em>, 10(9):988–997.</li>
+                    <li><strong>MacDonald et al. (2024)</strong> — Critical review of dopamine hypothesis for ADHD: limited evidence for simple hypo-dopaminergic state. <em>Frontiers in Psychiatry</em>, 15:1492126.</li>
+                </ul>
+            </div>
+
+            <div class="ref-group">
+                <h3>Time Perception</h3>
+                <ul class="ref-list">
+                    <li><strong>McFeaters et al. (2024)</strong> — Largest ADHD time perception meta-analysis: 824 effect sizes, g = 0.688. <em>Developmental Neuropsychology</em>, 49(1):1–24.</li>
+                </ul>
+            </div>
+
+            <div class="ref-group">
+                <h3>Habit Formation</h3>
+                <ul class="ref-list">
+                    <li><strong>Singh et al. (2024)</strong> — Habit formation meta-analysis: 106–154 days average (N = 2,601). <em>Healthcare</em>, 12(23):2488.</li>
+                    <li><strong>Langen et al. (2014)</strong> — Caudate nucleus grows at 2× rate in autism, mediating habitual behaviors. <em>Biological Psychiatry</em></li>
+                </ul>
+            </div>
+
+            <div class="ref-group">
+                <h3>AuDHD &amp; Co-occurrence</h3>
+                <ul class="ref-list">
+                    <li><strong>Rong et al. (2021)</strong> — ASD+ADHD overlap: ~40%. Meta-analysis of 63 studies.</li>
+                    <li><strong>Craig et al. (2016)</strong> — AuDHD combines deficits from both conditions. Review of 26 studies.</li>
+                    <li><strong>Van Bergen et al. (2025)</strong> — Co-occurrence of ADHD, dyslexia, dyscalculia: 2.1–3.1× risk. <em>Psychological Science</em></li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ============================================
+             FOOTER
+             ============================================ -->
+        <footer class="page-footer">
+            <p>
+                NeuralWake is designed and built by <a href="https://github.com/vegaPDX">vegaPDX</a>. 100% free. Zero ads. Zero data collection.
+            </p>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="mailto:support@neuralwake.app">Contact</a>
+            </div>
+        </footer>
+
+    </main>
+</body>
+</html>
